@@ -2,11 +2,11 @@
 
 [TOC]
 
-###About  
+### About  
 This project will help to divide the web application code to packages using MVC code structure .  
 It uses gorilla/mux and gorm for mysql database  
 
-###File structure:-  
+### File structure:-  
 - main.go *server configurations*  
 - api  
 -v1.go *contains the api routers*  
@@ -17,6 +17,6 @@ It uses gorilla/mux and gorm for mysql database
 - controllers  
 -UserController.go *contains CRUD functions*  
 
-###Further updates:-  
+### Further updates:-  
 - JWT middleware  
 - Swagger Docs  
