@@ -1,10 +1,8 @@
-## Golang gorilla based MVC template  
+## Go microblogging webapp 
 
-[TOC]
 
 ### About  
-This project will help to divide the web application code to packages using MVC code structure .  
-It uses gorilla/mux and gorm for mysql database  
+This project is boilerplate for gorilla web apis , JSON web tokens and gorm library for using in further projects. Gorm library is used for MySQL tables and implement relationships , JWT for authetication/authorization . This project follows MVC code structure for breaking down code to modules
 
 ### File structure:-  
 - main.go *server configurations*  
@@ -12,11 +10,9 @@ It uses gorilla/mux and gorm for mysql database
 -v1.go *contains the api routers*  
 - DBs  
 -Migrations.go *database configurations and migrations*  
-- models  
--Users.go *sample table structure*  
-- controllers  
--UserController.go *contains CRUD functions*  
+- models *sample table structure*  
+- controllers *contains CRUD functions*  
 
 ### Further updates:-  
-- JWT middleware  
 - Swagger Docs  
+- Post Likes and creation  

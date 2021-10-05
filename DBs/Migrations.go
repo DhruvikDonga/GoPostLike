@@ -21,5 +21,11 @@ func IntialMigration() {
 		fmt.Println(err.Error())
 		panic("Cannot connect to the DB")
 	}
-	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(
+		&models.User{},
+		&models.Posts{},
+		&models.PostImage{},
+		&models.PostLike{},
+	)
+
 }
