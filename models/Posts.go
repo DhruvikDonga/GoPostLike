@@ -10,8 +10,8 @@ type Posts struct {
 	Postdescription string      `json:"description"`
 	PostLikes       int         `json:"likes"`
 	UserID          int         `json:"userid"`
-	PostImage       []PostImage `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` //one post can have many images
-	PostLike        []PostLike  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` //one post can have many likes
+	PostImage       []PostImage `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"` //one post can have many images
+	PostLike        []PostLike  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"` //one post can have many likes
 }
 
 //PostImage contains multiple images of a post

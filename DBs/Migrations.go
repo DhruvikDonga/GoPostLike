@@ -26,6 +26,7 @@ func IntialMigration() {
 		&models.Posts{},
 		&models.PostImage{},
 		&models.PostLike{},
+		&models.Followers{},
 	)
 
 }

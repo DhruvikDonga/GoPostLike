@@ -5,16 +5,26 @@ import "gorm.io/gorm"
 //User model contains first,Last name and email address
 type User struct {
 	gorm.Model
-	FirstName string     `json:"firstname"`
-	LastName  string     `json:"lastname"`
-	Email     string     `json:"email"`
-	Password  string     `json:"password"`
-	Post      []Posts    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` //one user can have many posts
-	PostLike  []PostLike `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` //one user like many post
-	Role      string     `json:"role"`
+	FirstName      string      `json:"firstname"`
+	LastName       string      `json:"lastname"`
+	Email          string      `json:"email"`
+	Password       string      `json:"password"`
+	Post           []Posts     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"` //one user can have many posts
+	PostLike       []PostLike  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"` //one user like many post
+	Role           string      `json:"role"`
+	TotalPosts     int         `json:"totalposts"`
+	TotalFollowers int         `json:"totalfollowers"`
+	Followers      []Followers `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"` //one user can have many followers
 }
 
-//Not a model only aa stuct
+//Followers model is many to many relationship between usersid
+type Followers struct {
+	gorm.Model
+	UserID     int `json:"userid"`
+	FollowerID int `json:"followerid"`
+}
+
+//Not a model only a login structure
 type Authentication struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`

@@ -78,6 +78,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(token)
 }
 
+//get all the users
 func GetUsers(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Role") != "user" {
 		w.Write([]byte("Not authorized."))
@@ -89,6 +90,8 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(users)
 
 }
+
+//get individual user
 func GetUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content- Type", "application/json")
 	params := mux.Vars(r)
@@ -97,6 +100,8 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 
 }
+
+//create a new user
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content- Type", "application/json")
 	var user models.User
@@ -104,6 +109,8 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	dbs.DB.Create(&user)
 	json.NewEncoder(w).Encode(user)
 }
+
+//update user details
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content- Type", "application/json")
 	params := mux.Vars(r)
@@ -113,6 +120,8 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	dbs.DB.Save(&user)
 	json.NewEncoder(w).Encode(user)
 }
+
+//delete a user
 func DeleteUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content- Type", "application/json")
 	params := mux.Vars(r)

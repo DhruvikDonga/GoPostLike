@@ -11,11 +11,18 @@ import (
 
 	dbs "github.com/DhruvikDonga/goshopcart/DBs"
 	"github.com/DhruvikDonga/goshopcart/api"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
 func main() {
 
+	//CORS configurations
+	cors := handlers.CORS(
+		handlers.AllowedHeaders([]string{"content-type"}),
+		handlers.AllowedOrigins([]string{"*"}),
+		handlers.AllowCredentials(),
+	)
 	var wait time.Duration
 	flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
 	flag.Parse()
@@ -24,7 +31,7 @@ func main() {
 	apirouters := r.PathPrefix("/api").Subrouter()
 	dbs.IntialMigration()
 	api.V1(apirouters)
-
+	r.Use(cors)
 	srv := &http.Server{
 		Addr:         "localhost:9000",
 		WriteTimeout: time.Second * 15,
