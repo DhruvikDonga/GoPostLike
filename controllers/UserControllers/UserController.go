@@ -70,7 +70,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var token models.Token
-	token.UserProfile = getuser
+	token.Email = getuser.Email
 	token.Role = getuser.Role
 	token.TokenString = validToken
 	w.Header().Set("Content-Type", "application/json")

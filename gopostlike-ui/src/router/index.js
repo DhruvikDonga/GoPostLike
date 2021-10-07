@@ -40,6 +40,7 @@ const routes = [
 
     }
   },
+  
   {
     path: '/admindasboard',
     name: 'admin',
