@@ -17,35 +17,12 @@
       <v-btn
         text
         color="teal accent-4"
-        @click="reveal = true"
       >
         Learn More
       </v-btn>
     </v-card-actions>
 
-    <v-expand-transition>
-      <v-card
-        v-if="reveal"
-        class="transition-fast-in-fast-out v-card--reveal"
-        style="height: 100%;"
-      >
-        <v-card-text class="pb-0">
-          <p class="text-h4 text--primary">
-            Origin
-          </p>
-          <p>{{posts}}</p>
-        </v-card-text>
-        <v-card-actions class="pt-0">
-          <v-btn
-            text
-            color="teal accent-4"
-            @click="reveal = false"
-          >
-            Close
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-expand-transition>
+   
   </v-card>
 </template>
 
@@ -61,6 +38,7 @@ export default {
 
   // Fetches posts when the component is created.
   created() {
+    
     axios.get(`http://localhost:9000/api/welcome`)
     .then(response => {
       // JSON responses are automatically parsed.

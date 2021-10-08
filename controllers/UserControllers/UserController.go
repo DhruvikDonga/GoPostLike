@@ -38,7 +38,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 	user.Role = "user"
 	dbs.DB.Create(&user)
-	json.NewEncoder(w).Encode(user)
+	json.NewEncoder(w).Encode("1")
 }
 func SignIn(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content- Type", "application/json")
@@ -70,7 +70,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var token models.Token
-	token.Email = getuser.Email
+	token.Email = int(getuser.ID)
 	token.Role = getuser.Role
 	token.TokenString = validToken
 	w.Header().Set("Content-Type", "application/json")

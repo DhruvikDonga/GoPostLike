@@ -3,6 +3,7 @@ package usermiddleware
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -28,7 +29,7 @@ func JWTgenerate(email, role string) (string, error) {
 
 func UserAuthorization(handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		//log.Println(r.Header)
+		log.Println(r.Header)
 		if r.Header["Token"] == nil {
 			json.NewEncoder(w).Encode("Error in token no token found")
 			return

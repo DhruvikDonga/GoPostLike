@@ -1,4 +1,5 @@
 <template>
+
   <form>
     
     <v-text-field
@@ -18,16 +19,23 @@
       required
     
     ></v-text-field>
-  
+
+    
 
     <v-btn
       class="mr-4"
-      @click="submit"
+      @click="handlesubmit"
     >
       submit
     </v-btn>
-    
+    <v-alert
+    v-if="error"
+  color="red"
+  elevation="24"
+  type="warning"
+>{{error}}</v-alert>
   </form>
+  
 </template>
 
 <script>
@@ -37,12 +45,13 @@ export default {
   data () {
     return {
       email : "",
-      password : ""
+      password : "",
+      error:"",
     }
   },
   methods: {
 
-    submit(e) {
+    handlesubmit(e) {
       e.preventDefault()
       if (this.password.length > 0) {
           
@@ -51,8 +60,11 @@ export default {
           password: this.password
         })
         .then(response => {
-            console.log(response.data)
           let usertype = response.data.role
+
+          if (response.data.token!=null){
+
+
           localStorage.setItem('email',JSON.stringify(response.data.email))
           localStorage.setItem('jwt',response.data.token)
 
@@ -69,6 +81,10 @@ export default {
                 this.$router.push('dashboard')
               }
             }
+          }
+          }
+          else {
+            this.error = response.data
           }
         })
         .catch(function (error) {

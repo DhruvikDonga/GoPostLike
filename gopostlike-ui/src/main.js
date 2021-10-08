@@ -6,10 +6,10 @@ import 'vuetify/dist/vuetify.min.css'
 import router from './router'
 import '@mdi/font/css/materialdesignicons.css'
 // Add Axios
-import Axios from 'axios'
+import axios from 'axios'
 
 // Add Axios
-Vue.prototype.$http = Axios;
+Vue.prototype.$http = axios;
 Vue.use(Vuetify)
 export default new Vuetify({
   icons: {

@@ -32,6 +32,6 @@ type Authentication struct {
 
 type Token struct {
 	Role        string `json:"role"`
-	Email       string `json:"email"`
+	Email       int    `json:"email"`
 	TokenString string `json:"token"`
 }

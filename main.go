@@ -25,7 +25,24 @@ func main() {
 	apirouters := r.PathPrefix("/api").Subrouter()
 	dbs.IntialMigration()
 	api.V1(apirouters)
-	corshandler := cors.Default().Handler(r)
+	corshandler := cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:8081"}, //you service is available and allowed for this base url
+		AllowedMethods: []string{
+			http.MethodGet, //http methods for your app
+			http.MethodPost,
+			http.MethodPut,
+			http.MethodPatch,
+			http.MethodDelete,
+			http.MethodOptions,
+			http.MethodHead,
+			"POST",
+		},
+
+		AllowedHeaders: []string{
+			"Token", //or you can your header key values which you are using in your application
+			"X-Requested-With", "Content-Type",
+		},
+	}).Handler(r)
 	srv := &http.Server{
 		Addr:         "localhost:9000",
 		WriteTimeout: time.Second * 15,
