@@ -2,6 +2,7 @@ package api
 
 import (
 	Homecontrollers "github.com/DhruvikDonga/goshopcart/controllers/HomeControllers"
+	Postcontrollers "github.com/DhruvikDonga/goshopcart/controllers/PostControllers"
 	"github.com/DhruvikDonga/goshopcart/controllers/UserControllers"
 
 	usermiddleware "github.com/DhruvikDonga/goshopcart/middlewares"
@@ -17,12 +18,14 @@ func V1(r *mux.Router) {
 	//Users signin and signup
 	r.HandleFunc("/signin", UserControllers.SignIn).Methods("POST")
 	r.HandleFunc("/signup", UserControllers.SignUp).Methods("POST")
-
 	r.HandleFunc("/users", usermiddleware.UserAuthorization(UserControllers.GetUsers)).Methods("GET")
 	r.HandleFunc("/user/{id}", UserControllers.GetUser).Methods("GET")
 	r.HandleFunc("/users", UserControllers.CreateUser).Methods("POST")
 	r.HandleFunc("/users/{id}", UserControllers.UpdateUser).Methods("PUT")
 	r.HandleFunc("/users/{id}", UserControllers.DeleteUsers).Methods("DELETE")
+
+	//Posts
+	r.HandleFunc("/createpost", usermiddleware.UserAuthorization(Postcontrollers.CreatePost)).Methods("POST")
 
 	//logs
 
