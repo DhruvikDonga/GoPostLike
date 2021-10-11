@@ -9,12 +9,12 @@ type User struct {
 	LastName       string      `json:"lastname"`
 	Email          string      `json:"email"`
 	Password       string      `json:"password"`
-	Post           []Posts     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"` //one user can have many posts
-	PostLike       []PostLike  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"` //one user like many post
+	Post           []Posts     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` //one user can have many posts
+	PostLike       []PostLike  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` //one user like many post
 	Role           string      `json:"role"`
 	TotalPosts     int         `json:"totalposts"`
 	TotalFollowers int         `json:"totalfollowers"`
-	Followers      []Followers `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"` //one user can have many followers
+	Followers      []Followers `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` //one user can have many followers
 }
 
 //Followers model is many to many relationship between usersid

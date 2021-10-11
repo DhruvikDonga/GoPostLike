@@ -2,9 +2,12 @@ package Postcontrollers
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"time"
 
 	dbs "github.com/DhruvikDonga/goshopcart/DBs"
@@ -37,7 +40,7 @@ func Generateslug(length int) string {
 func GetPosts(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content- Type", "application/json")
-	var posts []models.Posts
+	var posts models.Posts
 	dbs.DB.Find(&posts)
 	json.NewEncoder(w).Encode(posts)
 
@@ -55,19 +58,84 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 
 //create a new post
 func CreatePost(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content- Type", "application/json")
+
 	if r.Header.Get("Role") != "user" {
 		w.Write([]byte("Not authorized."))
 		//log.Println(r.Header.Get("Email"))
 		return
 	}
-	w.Header().Set("Content- Type", "application/json")
+	mr, err := r.MultipartReader()
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
 	var post models.Posts
-	log.Println(r.Body)
-	json.NewDecoder(r.Body).Decode(&post)
-	post.Postslug = Generateslug(10)
-	//log.Println(post)
-	dbs.DB.Create(&post)
-	json.NewEncoder(w).Encode(post)
+	var postimageid, no int
+	part, err := mr.NextPart()
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+	// JSON 'doc' part
+	if part.FormName() == "post" {
+		jsonDecoder := json.NewDecoder(part)
+		jsonDecoder.Decode(&post)
+		post.Postslug = Generateslug(20)
+		dbs.DB.Create(&post)
+		postimageid = int(post.ID)
+		no = post.Images
+		log.Println(postimageid)
+	}
+
+	//post images
+	postimages := []models.PostImage{}
+	for k := 0; k < no; k++ {
+		part, err := mr.NextPart()
+		if err != nil {
+			json.NewEncoder(w).Encode(post)
+			return
+		}
+
+		if part.FormName() == "postimage" {
+
+			//fmt.Println("URL:", part.FileName())
+			img := models.PostImage{
+				PostsID: postimageid,
+				Image:   part.FileName(),
+			}
+
+			outfile, err := os.Create("./storage/postimage/" + part.FileName())
+			if err != nil {
+				json.NewEncoder(w).Encode("Internal server error")
+				return
+			}
+			defer outfile.Close()
+
+			_, err = io.Copy(outfile, part)
+
+			if err != nil {
+				json.NewEncoder(w).Encode("Internal server error")
+				return
+			}
+			postimages = append(postimages, img)
+
+		}
+
+	}
+	log.Println("VVSVSVSFSVSSVS")
+	fmt.Println("No shit:-", postimages)
+	if postimages != nil {
+		dbs.DB.Create(&postimages)
+	}
+
+	var wholepost models.PostComplete
+	wholepost.Postmodel = post
+	wholepost.Imagemodel = postimages
+
+	json.NewEncoder(w).Encode(wholepost)
+
 }
 
 //update post
