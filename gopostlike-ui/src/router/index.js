@@ -31,7 +31,7 @@ const routes = [
     }
   },
   {
-    path: '/dashboard',
+    path: '/:username',
     name: 'userboard',
     component: Userboard,
     meta: {

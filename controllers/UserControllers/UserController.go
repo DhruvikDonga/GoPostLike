@@ -29,6 +29,11 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode("Problem with email already in use!")
 		return
 	}
+	dbs.DB.Model(&models.User{}).Where("username=?", user.Username).First(&getuser) //check if emails clashed between users
+	if getuser.Email != "" {
+		json.NewEncoder(w).Encode("Problem with username already in use!")
+		return
+	}
 
 	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
 	user.Password = string(bytes)
@@ -64,13 +69,13 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	validToken, err := usermiddleware.JWTgenerate(getuser.Email, getuser.Role)
+	validToken, err := usermiddleware.JWTgenerate(getuser.Username, getuser.Role)
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
 		return
 	}
 	var token models.Token
-	token.Email = int(getuser.ID)
+	token.Email = getuser.Username
 	token.Role = getuser.Role
 	token.TokenString = validToken
 	w.Header().Set("Content-Type", "application/json")
@@ -80,14 +85,12 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 
 //get all the users
 func GetUsers(w http.ResponseWriter, r *http.Request) {
-	if r.Header.Get("Role") != "user" {
-		w.Write([]byte("Not authorized."))
-		return
-	}
+
 	w.Header().Set("Content- Type", "application/json")
 	var users []models.User
 	dbs.DB.Find(&users)
 	json.NewEncoder(w).Encode(users)
+	//log.Println(users)
 
 }
 
@@ -97,8 +100,11 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	var user models.User
 	var posts models.Posts
-	dbs.DB.First(&user, params["id"])
-	dbs.DB.First(&posts, params["id"])
+
+	dbs.DB.Model(&user).Where("username= ?", params["username"]).First(&user)
+
+	dbs.DB.Model(&posts).Where("user_id= ?", user.ID).Find(&posts)
+
 	json.NewEncoder(w).Encode(user)
 
 }

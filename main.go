@@ -23,6 +23,7 @@ func main() {
 
 	r := mux.NewRouter()
 	apirouters := r.PathPrefix("/api").Subrouter()
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./storage/postimage"))) //image routes
 	dbs.IntialMigration()
 	api.V1(apirouters)
 	corshandler := cors.New(cors.Options{

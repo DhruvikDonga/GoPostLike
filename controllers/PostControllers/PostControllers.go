@@ -2,7 +2,6 @@ package Postcontrollers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"math/rand"
@@ -56,6 +55,31 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//get  posts by a user
+func GetUserPosts(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content- Type", "application/json")
+
+	var getuser models.User
+	params := mux.Vars(r)
+	userposts := []models.PostComplete{}
+	var post []models.Posts
+	postimage := []models.PostImage{}
+	dbs.DB.Model(&getuser).Where("username=?", params["username"]).First(&getuser)
+
+	dbs.DB.Model(&post).Where("user_id=?", getuser.ID).Find(&post)
+
+	for _, v := range post {
+		dbs.DB.Model(&postimage).Where("posts_id=?", v.ID).Find(&postimage)
+
+		var temp models.PostComplete
+		temp.Postmodel = v
+		temp.Imagemodel = postimage
+		userposts = append(userposts, temp)
+	}
+	json.NewEncoder(w).Encode(userposts)
+
+}
+
 //create a new post
 func CreatePost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content- Type", "application/json")
@@ -65,6 +89,9 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		//log.Println(r.Header.Get("Email"))
 		return
 	}
+	var getuser models.User
+	dbs.DB.Model(&getuser).Where("username= ?", r.Header.Get("email")).First(&getuser)
+
 	mr, err := r.MultipartReader()
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
@@ -103,7 +130,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 			//fmt.Println("URL:", part.FileName())
 			img := models.PostImage{
 				PostsID: postimageid,
-				Image:   part.FileName(),
+				Image:   "/" + part.FileName(),
 			}
 
 			outfile, err := os.Create("./storage/postimage/" + part.FileName())
@@ -124,8 +151,8 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
-	log.Println("VVSVSVSFSVSSVS")
-	fmt.Println("No shit:-", postimages)
+	//log.Println("VVSVSVSFSVSSVS")
+	//fmt.Println("No shit:-", postimages)
 	if postimages != nil {
 		dbs.DB.Create(&postimages)
 	}
@@ -134,7 +161,11 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	wholepost.Postmodel = post
 	wholepost.Imagemodel = postimages
 
-	json.NewEncoder(w).Encode(wholepost)
+	//update post no
+	getuser.TotalPosts += 1
+	dbs.DB.Model(&getuser).Update("total_posts", getuser.TotalPosts)
+
+	json.NewEncoder(w).Encode("post created successfully")
 
 }
 

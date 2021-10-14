@@ -31,7 +31,7 @@
     <v-btn link
               v-if="gettoken!=null"
 
-         :to = "{ name:'userboard' }">
+         :to = "{ name:'userboard' , params: { username:  username }}">
       <span>Profile</span>
 
       <v-icon>mdi-account</v-icon>
@@ -54,7 +54,7 @@ export default {
   
   data() {
     return {
-  email:null,
+  username:null,
     }
   },
   computed: {
@@ -68,7 +68,7 @@ gettoken() {
   },
   created(){
 
-    this.email= localStorage.getItem('email').slice(1, -1)
+    this.username= localStorage.getItem('email').slice(1, -1)
 
   },
   methods: {

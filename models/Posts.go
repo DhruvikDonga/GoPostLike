@@ -31,6 +31,6 @@ type PostLike struct {
 
 //Complete post struct returns a whole struct of post with image structs
 type PostComplete struct {
-	Postmodel  Posts
-	Imagemodel []PostImage
+	Postmodel  Posts       `json:"postdata"`
+	Imagemodel []PostImage `json:"postimages"`
 }

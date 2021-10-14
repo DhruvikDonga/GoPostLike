@@ -1,7 +1,13 @@
 <template>
    <form>
            <h3>Signup:-</h3>
+<v-text-field
+      v-model="username"
+      label="Username"
 
+      required
+     
+    ></v-text-field>
     <v-text-field
       v-model="firstname"
       label="First Name"
@@ -64,6 +70,7 @@ import axios from 'axios';
 export default {
   data () {
     return {
+      username:"",
       firstname : "",
       lastname: "",
       email : "",
@@ -80,6 +87,7 @@ export default {
       
 
         axios.post(`http://localhost:9000/api/signup`, {
+          username:this.username,
           firstname: this.firstname,
         lastname: this.lastname,
 

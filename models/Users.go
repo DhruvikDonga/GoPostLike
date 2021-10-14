@@ -5,6 +5,7 @@ import "gorm.io/gorm"
 //User model contains first,Last name and email address
 type User struct {
 	gorm.Model
+	Username       string      `json:"username"`
 	FirstName      string      `json:"firstname"`
 	LastName       string      `json:"lastname"`
 	Email          string      `json:"email"`
@@ -32,6 +33,6 @@ type Authentication struct {
 
 type Token struct {
 	Role        string `json:"role"`
-	Email       int    `json:"email"`
+	Email       string `json:"email"`
 	TokenString string `json:"token"`
 }
