@@ -78,7 +78,7 @@ export default {
                 this.$router.push('admin')
               }
               else {
-                this.$router.push(localStorage.getItem("email"))
+                this.$router.push(localStorage.getItem("email").slice(1, -1))
               }
             }
           }

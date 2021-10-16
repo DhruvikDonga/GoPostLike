@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	dbs "github.com/DhruvikDonga/goshopcart/DBs"
@@ -83,10 +84,10 @@ func GetUserPosts(w http.ResponseWriter, r *http.Request) {
 //create a new post
 func CreatePost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content- Type", "application/json")
+	log.Println("Create post function:-", r.Header.Get("Email"))
 
 	if r.Header.Get("Role") != "user" {
 		w.Write([]byte("Not authorized."))
-		//log.Println(r.Header.Get("Email"))
 		return
 	}
 	var getuser models.User
@@ -110,6 +111,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		jsonDecoder := json.NewDecoder(part)
 		jsonDecoder.Decode(&post)
 		post.Postslug = Generateslug(20)
+		post.UserID = int(getuser.ID)
 		dbs.DB.Create(&post)
 		postimageid = int(post.ID)
 		no = post.Images
@@ -126,14 +128,15 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if part.FormName() == "postimage" {
-
-			//fmt.Println("URL:", part.FileName())
+			filename := part.FileName()
+			filename = strconv.Itoa(postimageid) + "-" + filename
+			log.Println("URL:", part.FileName())
 			img := models.PostImage{
 				PostsID: postimageid,
-				Image:   "/" + part.FileName(),
+				Image:   "/" + filename,
 			}
 
-			outfile, err := os.Create("./storage/postimage/" + part.FileName())
+			outfile, err := os.Create("./storage/postimage/" + filename)
 			if err != nil {
 				json.NewEncoder(w).Encode("Internal server error")
 				return
@@ -151,8 +154,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
-	//log.Println("VVSVSVSFSVSSVS")
-	//fmt.Println("No shit:-", postimages)
+
 	if postimages != nil {
 		dbs.DB.Create(&postimages)
 	}

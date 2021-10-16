@@ -27,8 +27,24 @@
     <v-main
     center
     >
-    <br>
-    <br>
+   <v-card
+    v-if="user==this.$route.params.username"
+         class="mx-auto"
+    max-width="344"
+    align="center"
+    max-height="344"
+        >
+        <v-btn
+  elevation="13"
+  large
+  block
+  color="primary"
+  x-large
+  link :to = "{ name:'createpost' }"
+>Create Post</v-btn>
+   </v-card>
+
+
     <v-card
          v-if="userdetails.totalposts==0"
          class="mx-auto"
@@ -76,7 +92,7 @@
   </v-card>
       </v-flex>
    </v-container>
-
+  <br><br>
     </v-main>
  </v-app>
 </template>
@@ -89,7 +105,7 @@ export default {
     return {
       userdetails:{},
       show: false,
-
+      user:localStorage.getItem("email").slice(1, -1),
       posts:null,
      
     }
@@ -103,7 +119,7 @@ export default {
     
     {
     headers: {
-   Token: 'Bearer ' + localStorage.getItem("jwt") //the token is a variable which holds the token
+   Token: localStorage.getItem("jwt") //the token is a variable which holds the token
   }
     }
     )

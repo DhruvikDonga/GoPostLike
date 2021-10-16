@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../components/Home.vue'
 import Admin from '../components/Admin.vue'
 import Userboard from '../components/Userboard.vue'
+import CreatePost from '../components/CreatePost.vue'
+
 import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
 
@@ -34,6 +36,12 @@ const routes = [
     path: '/:username',
     name: 'userboard',
     component: Userboard,
+   
+  },
+  {
+    path: '/createpost',
+    name: 'createpost',
+    component: CreatePost,
     meta: {
       requiresAuth: true,
       role : "user"

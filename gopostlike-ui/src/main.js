@@ -10,6 +10,11 @@ import axios from 'axios'
 
 // Add Axios
 Vue.prototype.$http = axios;
+axios.defaults.headers.common = {
+  'Token': `${localStorage.getItem("jwt")}`,
+
+}
+
 Vue.use(Vuetify)
 export default new Vuetify({
   icons: {
@@ -22,5 +27,6 @@ export default new Vuetify({
 new Vue({
   vuetify : new Vuetify(),
   router,
+  axios,
   render: h => h(App)
 }).$mount('#app')

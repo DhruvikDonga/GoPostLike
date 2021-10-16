@@ -10,7 +10,13 @@
 
       <v-icon>mdi-home</v-icon>
     </v-btn>
+<v-btn link
+v-if="gettoken!=null"
+         :to = "{ name:'createpost' }">
+      <span>Create</span>
 
+      <v-icon>mdi-image</v-icon>
+    </v-btn>
     <v-btn link
               v-if="gettoken==null"
 
