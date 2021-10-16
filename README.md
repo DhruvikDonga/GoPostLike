@@ -1,6 +1,6 @@
 ## Go microblogging webapp 
 
-https://img.shields.io/github/issues/DhruvikDonga/GoPostLike?style=flat-square
+![image]({https://img.shields.io/github/issues/DhruvikDonga/GoPostLike?style=flat-square1})
 ### About  
 This project is boilerplate for gorilla web apis , JSON web tokens and gorm library for using in further projects. Gorm library is used for MySQL tables and implement relationships , JWT for authetication/authorization . This project follows MVC code structure for breaking down code to modules
 
